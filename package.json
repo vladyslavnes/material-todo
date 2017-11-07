@@ -1,0 +1,20 @@
+{
+  "name": "material-todo",
+  "version": "1.0.0",
+  "description": "Simple Materail\u001b[D\u001b[\u001b[C\u001b[Cial TODO\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[C\u001b[C\u001b[C\u001b[C\u001b[3~m",
+  "main": "index.html",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "github.com/vladyslavnes/material-todo/"
+  },
+  "keywords": [
+    "todo",
+    "material",
+    "vanillaJS"
+  ],
+  "author": "Vladyslav Nesterenko",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {}
+}
