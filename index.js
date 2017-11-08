@@ -1,9 +1,6 @@
-console.log(200);
-
 document.body.onload = function (e) {
 	localStorage.todos = localStorage.todos || '[]';
 	window.todos = JSON.parse(localStorage.todos);
-
 	saveTodos();
 };
 
@@ -13,8 +10,10 @@ var data = document.getElementById('data').children;
 document.querySelector('button.add')
 	.addEventListener('click', function (event) {
 		event.preventDefault();
-		addTodo(event.target.parentNode[0].value);
-		event.target.parentNode[0].value = '';
+		if (event.target.parentNode[0].value) {
+			addTodo(event.target.parentNode[0].value);
+			event.target.parentNode[0].value = '';
+		}
 	});
 
 document.querySelector('button.select-all')
@@ -90,8 +89,8 @@ function removeTodos(type) {
 function renderTodo (id) {
 	todosList.innerHTML += `
 		<div id="todo_${id}" class="col s12 m6 l4">
-			<div class="card-panel cyan darken-2">
-				<p class="white-text flow-text ${todos[id].isDone ? 'done' : ''}" contenteditable="true" onblur="changeTodo(${id},this.innerText)">${todos[id].content}</p>
+			<div class="card-panel grey lighten-2">
+				<p class="black-text flow-text ${todos[id].isDone ? 'done' : ''}" contenteditable="true" onblur="changeTodo(${id},this.innerText)">${todos[id].content}</p>
 				<button onclick="deleteTodo(${id})" class="orange darken-4 btn-floating"><i class="material-icons">delete</i></button>
 				<button onclick="markTodo(${id},this.classList[0])" class="${!todos[id].isDone ? 'mark' : 'unmark'} orange darken-4 btn-floating"><i class="material-icons">${!todos[id].isDone ? 'done' : 'clear'}</i></button>
 			</div>
