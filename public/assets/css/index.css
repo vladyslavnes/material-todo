@@ -14,6 +14,11 @@ body {
   text-decoration: line-through;
 }
 
+li {
+  display: inline-block;
+  float: left;
+}
+
 input::placeholder {
   opacity: 1;
   color: #000;
@@ -28,7 +33,7 @@ input::placeholder {
   font-family: 'Nova Flat';
   font-style: normal;
   /*font-weight: 400;*/
-  src: local('Nova Flat'), local('NovaFlat'), url(../fonts/vFeor41nvsomiEVSx6n4iltXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+  src: local('Nova Flat'), local('NovaFlat'), url(/file/fonts/vFeor41nvsomiEVSx6n4iltXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }
 
@@ -37,7 +42,7 @@ input::placeholder {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: local('Material Icons'), local('MaterialIcons-Regular'), url(../fonts/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(/file/fonts/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
 }
 
 .material-icons {

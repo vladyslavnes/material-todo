@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+	<title>Material TODO</title>
+	
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link rel="stylesheet" href="./file/css/index.css">
+	<link rel="stylesheet" href="./file/css/materialize.min.css">
+	<link rel="stylesheet" href="./file/css/boardz.min.css">
+
+</head>
+<body class="container">
+	<form class="row card-panel grey lighten-2 col s12">
+		<div class="col s12 m10 left input-field">
+			<input autofocus class="black-text" type="text" name="input" placeholder="I've got to...">
+		</div>
+		<button class="add btn-large left col m1 s6"><i class="material-icons">add</i></button>
+		<button class="select-all btn-large left col m1 s6"><i class="material-icons">done_all</i></button>
+		<div class="clearfix"></div>
+		<span id="data" class="center">	
+			<div id="allCount" class="col s3 flow-text"></div>
+			<div id="doneCount" class="col s3 flow-text"></div>
+			<div id="undoneCount" class="col s3 flow-text"></div>
+			<div id="selectedCount" class="col s3 flow-text"></div>
+			<button class="btn col s12 m4" onclick="removeTodos('all')">remove all</button>
+			<button class="btn col s12 m4" onclick="removeTodos('done')">remove done</button>
+			<button class="btn col s12 m4" onclick="removeTodos('selected')">remove selected</button>
+			<button class="btn col s12 m4" onclick="selectTodos('all')">select all</button>
+			<button class="btn col s12 m4" onclick="selectTodos('done')">select done</button>
+			<button class="btn col s12 m4" onclick="selectTodos('undone')">select not done</button>
+		</span>
+	</form>
+
+	<div class="boardz fitted beautiful" class="row">
+		<ul id="todos"></ul>
+	</div>
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+	<script src="./index.js"></script>
+</body>
+</html>
