@@ -4,7 +4,7 @@
   "description": "Simple vanillaJS material todo-list",
   "main": "./server/app.js",
   "scripts": {
-  	"start": "node server/app.js",
+    "start": "node server/app.js",
     "server": "nodemon --inspect server/app.js",
     "test": "standard",
     "test:fix": "standard --fix"
