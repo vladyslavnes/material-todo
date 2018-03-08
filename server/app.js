@@ -19,15 +19,15 @@ app.get('/favicon.ico', function (req, res) {
 })
 
 app.get('/', function (req, res) {
-  res.sendFile(path.resolve(__dirname, '../public/index.html'))
+  res.sendFile(path.resolve(__dirname, '../docs/index.html'))
 })
 
 app.get('/index.js', function (req, res) {
-  res.sendFile(path.resolve(__dirname, `../public/index.js`))
+  res.sendFile(path.resolve(__dirname, `../docs/index.js`))
 })
 
 app.get('/file/:cat/:file', function (req, res) {
-  res.sendFile(path.resolve(__dirname, `../public/assets/${req.params.cat}/${req.params.file}`))
+  res.sendFile(path.resolve(__dirname, `../docs/assets/${req.params.cat}/${req.params.file}`))
 })
 
 app.use(bodyParser.json())
