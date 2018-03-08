@@ -1,164 +1,157 @@
 document.body.onload = saveTodos.bind(this)
 
-async function getTodos() {
-    let requestedTodos = []
-    let response = await axios('/api/v1/todos')
-    let  todos = response.data.todo
+async function getTodos () {
+  let requestedTodos = []
+  let response = await axios('/api/v1/todos')
+  let todos = response.data.todo
 
-    for (let i in todos) {
+  for (let i in todos) {
         // if (todos[i].content) {
-            delete todos[i].__v
-            requestedTodos[i] = todos[i]
+    delete todos[i].__v
+    requestedTodos[i] = todos[i]
         // }
-    }
-    
-    return requestedTodos
+  }
+
+  return requestedTodos
 }
 
-
-
 document.querySelector('button.add')
-    .addEventListener('click', function(event) {
-        event.preventDefault()
-        if (event.target.parentNode[0].value) {
-            addTodo(event.target.parentNode[0].value)
-            event.target.parentNode[0].value = ''
-        }
+    .addEventListener('click', function (event) {
+      event.preventDefault()
+      if (event.target.parentNode[0].value) {
+        addTodo(event.target.parentNode[0].value)
+        event.target.parentNode[0].value = ''
+      }
     })
 
 document.querySelector('button.select-all')
-    .addEventListener('click', function(event) {
-        event.preventDefault()
-        for (let i = window.todos.length - 1; i >= 0; i--)
-            window.todos[i].isDone = true
-        saveTodos()
+    .addEventListener('click', function (event) {
+      event.preventDefault()
+      for (let i = window.todos.length - 1; i >= 0; i--) { window.todos[i].isDone = true }
+      saveTodos()
     })
 
+function addTodo (content) {
+  let newObj = {
+    _id: window.lastID,
+    content: content,
+    isDone: false,
+    isSelected: false
+  }
 
+  axios.post('/api/v1/todos/', newObj)
 
-function addTodo(content) {
-    let newObj = {
-        _id: window.lastID,
-        content: content,
-        isDone: false,
-        isSelected: false
+  window.todos.push(newObj)
+
+  renderTodo(lastID)
+  saveTodos()
+  window.lastID++
+}
+
+function deleteTodo (id) {
+  axios.delete('/api/v1/todos/' + id)
+  saveTodos()
+}
+
+function markTodo (id, state) {
+  let content = todosList.children[id].children[0].querySelector('p')
+  let btn = todosList.children[id].children[0].querySelector('.btn.' + state)
+  window.todos[id].isDone = !window.todos[id].isDone
+  axios.put('/api/v1/todos/' + id, window.todos[id])
+  saveTodos()
+}
+
+function selectTodo (id) {
+  window.todos[id].isSelected = !window.todos[id].isSelected
+  axios.put('/api/v1/todos/' + id, window.todos[id])
+  saveTodos()
+}
+
+function changeTodo (id, content) {
+  window.todos[id].content = content
+  axios.put('/api/v1/todos/' + id, window.todos[id])
+  saveTodos()
+}
+
+async function saveTodos () {
+  window.todosList = document.querySelector('#todos')
+  window.data = document.querySelector('#data').children
+
+  window.todos = await getTodos()
+  window.lastID = window.todos.length
+
+  todosList.innerHTML = ''
+
+  for (var id = window.todos.length - 1; id >= 0; id--) {
+    renderTodo(id)
+  }
+
+  updateData()
+}
+
+function updateData () {
+  let undone = window.todos.length
+  let done = 0
+  let selected = 0
+
+  for (let i = 0; i < window.todos.length; i++) {
+    if (window.todos[i].isDone) {
+      done++
+      undone--
+    }
+    if (window.todos[i].isSelected) {
+      selected++
+    }
+  }
+  window.data.allCount.innerText = 'All: ' + window.todos.length
+  window.data.doneCount.innerText = 'Done: ' + done
+  window.data.undoneCount.innerText = 'Undone: ' + undone
+  window.data.selectedCount.innerText = 'Selected: ' + selected
+}
+
+function removeTodos (type) {
+  for (let i = window.todos.length - 1; i >= 0; i--) {
+    if (type === 'all') {
+      deleteTodo(i)
     }
 
-    axios.post('/api/v1/todos/', newObj)
-
-    window.todos.push(newObj)
-
-    renderTodo(lastID)
-    saveTodos()
-    window.lastID++
-}
-
-function deleteTodo(id) {
-    axios.delete('/api/v1/todos/'+id)
-    saveTodos()
-}
-
-function markTodo(id, state) {
-    let content = todosList.children[id].children[0].querySelector('p')
-    let btn = todosList.children[id].children[0].querySelector('.btn.' + state)
-    window.todos[id].isDone = !window.todos[id].isDone
-    axios.put('/api/v1/todos/'+id, window.todos[id])
-    saveTodos()
-}
-
-function selectTodo(id) {
-    window.todos[id].isSelected = !window.todos[id].isSelected
-    axios.put('/api/v1/todos/'+id, window.todos[id])
-    saveTodos()
-}
-
-function changeTodo(id, content) {
-    window.todos[id].content = content
-    axios.put('/api/v1/todos/'+id, window.todos[id])
-    saveTodos()
-}
-
-async function saveTodos() {
-    window.todosList = document.querySelector('#todos')
-    window.data = document.querySelector('#data').children
-
-    window.todos = await getTodos()
-    window.lastID = window.todos.length
-
-    todosList.innerHTML = ''
-
-    for (var id = window.todos.length - 1; id >= 0; id--) {
-        renderTodo(id)
+    if (type === 'done') {
+      if (window.todos[i].isDone) {
+        deleteTodo(i)
+      }
     }
 
-    updateData()
-}
-
-function updateData() {
-   let undone = window.todos.length
-    let done = 0
-    let selected = 0
-
-    for (let i = 0; i < window.todos.length; i++) {
-        if (window.todos[i].isDone) {
-            done++
-            undone--
-        }
-        if (window.todos[i].isSelected) {
-            selected++
-        }
+    if (type === 'selected') {
+      if (window.todos[i].isSelected) {
+        deleteTodo(i)
+      }
     }
-    window.data.allCount.innerText = 'All: ' + window.todos.length
-    window.data.doneCount.innerText = 'Done: ' + done
-    window.data.undoneCount.innerText = 'Undone: ' + undone
-    window.data.selectedCount.innerText = 'Selected: ' + selected
+  }
 }
 
-function removeTodos(type) {
-    for (let i = window.todos.length - 1; i >= 0; i--) {
-        if (type === 'all') {
-            deleteTodo(i)
-        }
-
-        if (type === 'done') {
-            if (window.todos[i].isDone) {
-                deleteTodo(i)
-            }
-        }
-
-        if (type === 'selected') {
-            if (window.todos[i].isSelected) {
-                deleteTodo(i)
-            }
-        }
-
+function selectTodos (type) {
+  for (let i = window.todos.length - 1; i >= 0; i--) {
+    if (type === 'all') {
+      window.todos[i].isSelected = true
     }
-}
 
-function selectTodos(type) {
-   for (let i = window.todos.length - 1; i >= 0; i--) {
-        if (type === 'all') {
-            window.todos[i].isSelected = true
-        }
-
-        if (type === 'done') {
-            if (window.todos[i].isDone) {
-                window.todos[i].isSelected = true
-            }
-        }
-
-        if (type === 'undone') {
-            if (!window.todos[i].isDone) {
-                window.todos[i].isSelected = true
-            }
-        }
-
+    if (type === 'done') {
+      if (window.todos[i].isDone) {
+        window.todos[i].isSelected = true
+      }
     }
-    saveTodos()
+
+    if (type === 'undone') {
+      if (!window.todos[i].isDone) {
+        window.todos[i].isSelected = true
+      }
+    }
+  }
+  saveTodos()
 }
 
-function renderTodo(id) {
-    todosList.innerHTML += `
+function renderTodo (id) {
+  todosList.innerHTML += `
         <li id="todo_${id}" class="col">
             <div class="card-panel grey ${!window.todos[id].isSelected ? 'lighten-2' : ''}">
                 <p class="black-text flow-text ${window.todos[id].isDone ? 'done' : ''}" contenteditable="true" onblur="changeTodo(${id},this.innerText)">${window.todos[id].content}</p>

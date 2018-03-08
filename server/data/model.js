@@ -5,6 +5,6 @@ const todoSchema = new mongoose.Schema({
   content: String,
   isDone: Boolean,
   isSelected: Boolean
- }, { _id: false })
+}, { _id: false })
 
 module.exports = mongoose.model('Todo', todoSchema)

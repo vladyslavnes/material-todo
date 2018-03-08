@@ -14,7 +14,7 @@ router.post('/todos', (req, res, next) => {
 })
 
 router.get('/todos', (req, res, next) => {
- Todo.find({})
+  Todo.find({})
    .then(todo => {
      res.json({todo})
    })

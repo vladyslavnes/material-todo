@@ -14,7 +14,7 @@ app.listen(config.port, () => {
 })
 
 // added for development
-app.get('/favicon.ico', function(req, res) {
+app.get('/favicon.ico', function (req, res) {
   res.status(204)
 })
 
