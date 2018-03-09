@@ -1,3 +1,4 @@
+/* eslint-disable */
 document.body.onload = saveTodos.bind(this)
 
 async function getTodos () {

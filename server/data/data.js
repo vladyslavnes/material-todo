@@ -1,7 +1,5 @@
 const express = require('express')
-
 const Todo = require('./model')
-
 const router = express.Router()
 
 router.post('/todos', (req, res, next) => {
@@ -46,6 +44,30 @@ router.delete('/todos/:id', (req, res, next) => {
       res.json({todo})
     })
     .catch(next)
+})
+
+router.use((req, res, next) => {
+  const err = new Error(`Not Found ${req.path}`)
+  err.status = 404
+  next(err)
+})
+
+// If error happened in Node, return error. Otherwise call next handler
+router.use((error, req, res, next) => {
+  if (error) {
+    console.log(error)
+    return res.status(400).json({error})
+  }
+  next(error)
+})
+
+// If got no error code return status 500 - unknown error
+router.use((err, req, res, next) => {
+  res.status(err.status || 500)
+  res.render('error', {
+    message: err.message,
+    error: {}
+  })
 })
 
 module.exports = router
