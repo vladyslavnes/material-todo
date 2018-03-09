@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
 	<title>Material TODO</title>
 	
@@ -9,9 +9,12 @@
 	<link rel="stylesheet" href="./file/css/index.css">
 	<link rel="stylesheet" href="./file/css/materialize.min.css">
 	<link rel="stylesheet" href="./file/css/boardz.min.css">
-
+	
 </head>
 <body class="container">
+	<div id="spinner-overlay">
+		<div id="spinner"></div>
+	</div>
 	<form class="row card-panel grey lighten-2 col s12">
 		<div class="col s12 m10 left input-field">
 			<input autofocus class="black-text" type="text" name="input" placeholder="I've got to...">
@@ -37,7 +40,8 @@
 		<ul id="todos"></ul>
 	</div>
 	</div>
-	<script async defer src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
-	<script async defer  src="./index.js"></script>
+	
+	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+	<script defer  src="./index.js"></script>
 </body>
 </html>

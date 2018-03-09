@@ -1,4 +1,30 @@
 /* eslint-disable */
+
+let numberOfAjaxCAllPending = 0
+
+// Add a request interceptor
+axios.interceptors.request.use(function (config) {
+  numberOfAjaxCAllPending++
+  // show spinner
+  document.getElementById('spinner-overlay').style.display = 'flex'
+  return config
+}, function (error) {
+  return Promise.reject(error)
+})
+
+// Add a response interceptor
+axios.interceptors.response.use(function (response) {
+  numberOfAjaxCAllPending--
+
+  if (numberOfAjaxCAllPending == 0) {
+    // hide spinner
+    document.getElementById('spinner-overlay').style.display = 'none'
+  }
+  return response
+}, function (error) {
+  return Promise.reject(error)
+})
+
 document.body.onload = saveTodos.bind(this)
 
 async function getTodos () {
