@@ -27,19 +27,6 @@ axios.interceptors.response.use(function (response) {
 
 document.body.onload = saveTodos.bind(this)
 
-async function getTodos () {
-  let requestedTodos = []
-  let response = await axios('/api/v1/todos')
-  let todos = response.data.todo
-
-  for (let i in todos) {
-    delete todos[i].__v
-    requestedTodos[i] = todos[i]
-  }
-
-  return requestedTodos
-}
-
 document.querySelector('button.add')
   .addEventListener('click', function (event) {
     event.preventDefault()
@@ -64,18 +51,21 @@ function addTodo (content) {
     isSelected: false
   }
 
-  axios.post('/api/v1/todos/', newObj)
+  axios.post('/api/v1/todos', newObj)
 
   window.todos.push(newObj)
 
-  renderTodo(lastID)
-  saveTodos()
+  window.todosList.innerHTML += renderTodo(lastID)
   window.lastID++
+
+  updateData()
 }
 
 function deleteTodo (id) {
   axios.delete('/api/v1/todos/' + id)
-  saveTodos()
+  window.todos.splice(id, 1)
+  window.todosList.children[id].remove()
+  updateData()
 }
 
 function markTodo (id, state) {
@@ -83,19 +73,34 @@ function markTodo (id, state) {
   let btn = todosList.children[id].children[0].querySelector('.btn.' + state)
   window.todos[id].isDone = !window.todos[id].isDone
   axios.put('/api/v1/todos/' + id, window.todos[id])
-  saveTodos()
+  console.log(window.todosList)
+  window.todosList.children[id].outerHTML = renderTodo(id)
+  updateData()
 }
 
 function selectTodo (id) {
   window.todos[id].isSelected = !window.todos[id].isSelected
   axios.put('/api/v1/todos/' + id, window.todos[id])
-  saveTodos()
+  window.todosList.children[id].outerHTML = renderTodo(id)
+  updateData()
 }
 
 function changeTodo (id, content) {
   window.todos[id].content = content
   axios.put('/api/v1/todos/' + id, window.todos[id])
-  saveTodos()
+}
+
+async function getTodos () {
+  let requestedTodos = []
+  let response = await axios('/api/v1/todos')
+  let todos = response.data
+
+  for (let i in todos) {
+    delete todos[i].__v
+    requestedTodos[i] = todos[i]
+  }
+
+  return requestedTodos
 }
 
 async function saveTodos () {
@@ -103,12 +108,13 @@ async function saveTodos () {
   window.data = document.querySelector('#data').children
 
   window.todos = await getTodos()
+
   window.lastID = window.todos.length
 
   todosList.innerHTML = ''
 
-  for (var id = window.todos.length - 1; id >= 0; id--) {
-    renderTodo(id)
+  for (let id = 0; id < window.todos.length; id++) {
+    window.todosList.innerHTML += renderTodo(id)
   }
 
   updateData()
@@ -176,10 +182,9 @@ function selectTodos (type) {
 }
 
 function renderTodo (id) {
-  todosList.innerHTML += `
-        <li id="todo_${id}" class="col">
+  return `<li id="todo_${id}" class="col">
             <div class="card-panel grey ${!window.todos[id].isSelected ? 'lighten-2' : ''}">
-                <p class="black-text flow-text ${window.todos[id].isDone ? 'done' : ''}" contenteditable="true" onblur="changeTodo(${id},this.innerText)">${window.todos[id].content}</p>
+                <p class="content black-text flow-text ${window.todos[id].isDone ? 'done' : ''}" contenteditable="true" onblur="changeTodo(${id},this.innerText)">${window.todos[id].content}</p>
                 <button onclick="deleteTodo(${id})" class="orange darken-4 btn-floating"><i class="material-icons">delete</i></button>
                 <button onclick="markTodo(${id},this.classList[0])" class="${!window.todos[id].isDone ? 'mark' : 'unmark'} orange darken-4 btn-floating"><i class="material-icons">${!window.todos[id].isDone ? 'done' : 'clear'}</i></button>
                 <button onclick="selectTodo(${id})" class="${!window.todos[id].isSelected ? 'select' : 'unselect'} orange darken-4 btn-floating"><i class="material-icons">${todos[id].isSelected ? 'check_box' : 'check_box_outline_blank'}</i></button>

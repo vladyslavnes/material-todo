@@ -6,11 +6,10 @@ router.post('/todos', (req, res, next) => {
   // create a new Mongo document instance
   let newTodo = new Todo(req.body)
   // save it to DB
-  newTodo.save()
-    .then(todo => {
+  newTodo.save().then(todo => {
       // return saved todo
-      res.json({todo})
-    })
+    res.json({todo})
+  })
     .catch(next)
 })
 
@@ -56,7 +55,7 @@ router.use((req, res, next) => {
 router.use((error, req, res, next) => {
   if (error) {
     console.log(error)
-    return res.status(400).json({error})
+    return res.status(260).json({error})
   }
   next(error)
 })
