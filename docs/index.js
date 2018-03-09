@@ -6,30 +6,28 @@ async function getTodos () {
   let todos = response.data.todo
 
   for (let i in todos) {
-        // if (todos[i].content) {
     delete todos[i].__v
     requestedTodos[i] = todos[i]
-        // }
   }
 
   return requestedTodos
 }
 
 document.querySelector('button.add')
-    .addEventListener('click', function (event) {
-      event.preventDefault()
-      if (event.target.parentNode[0].value) {
-        addTodo(event.target.parentNode[0].value)
-        event.target.parentNode[0].value = ''
-      }
-    })
+  .addEventListener('click', function (event) {
+    event.preventDefault()
+    if (event.target.parentNode[0].value) {
+      addTodo(event.target.parentNode[0].value)
+      event.target.parentNode[0].value = ''
+    }
+  })
 
 document.querySelector('button.select-all')
-    .addEventListener('click', function (event) {
-      event.preventDefault()
-      for (let i = window.todos.length - 1; i >= 0; i--) { window.todos[i].isDone = true }
-      saveTodos()
-    })
+  .addEventListener('click', function (event) {
+    event.preventDefault()
+    for (let i = window.todos.length - 1; i >= 0; i--) { window.todos[i].isDone = true }
+    saveTodos()
+  })
 
 function addTodo (content) {
   let newObj = {

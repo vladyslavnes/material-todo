@@ -5,26 +5,36 @@ const Todo = require('./model')
 const router = express.Router()
 
 router.post('/todos', (req, res, next) => {
+  // create a new Mongo document instance
   let newTodo = new Todo(req.body)
+  // save it to DB
   newTodo.save()
     .then(todo => {
-      res.end(200)
+      // return saved todo
+      res.json({todo})
     })
-    .catch(err => console.error(err))
+    .catch(next)
 })
 
 router.get('/todos', (req, res, next) => {
   Todo.find({})
-   .then(todo => {
-     res.json({todo})
-   })
-   .catch(next)
+    .then(todos => {
+      res.json(todos)
+    })
+    .catch(next)
+})
+
+router.get('/todos/:id', (req, res, next) => {
+  Todo.findOne({_id: req.params.id})
+    .then(todo => {
+      res.json({todo})
+    })
+    .catch(next)
 })
 
 router.put('/todos/:id', (req, res, next) => {
   Todo.findOneAndUpdate({_id: req.params.id}, {...req.body})
     .then(todo => {
-      console.log('PUT request', todos)
       res.json({todo})
     })
     .catch(next)
